@@ -1,48 +1,42 @@
-# this commit points to https://github.com/gluster/glusterfs-coreutils/pull/4
-%global commit0 0c86f7f8459f4f743d7fe7cacdfb902768ee5f87
-# % global gittag0 GIT-TAG
+%global commit0 259f269f7a4345eabe419c29ce51a2d2a8346e19
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Summary:          Core Utilities for the Gluster Distributed File System
 Name:             glusterfs-coreutils
 Version:          0.0.1
 Release:          0.1.git%{shortcommit0}%{?dist}
-Vendor:           Gluster Community
 License:          GPLv3
 Group:            System Environment/Base
+URL:              https://github.com/gluster/glusterfs-coreutils
+# The source for this package was created from upstream source using the
+# following command:
+#       make dist
+Source0:          %{name}-%{shortcommit0}.tar.gz
+
+Provides:         bundled(gnulib)
+
+Requires:         glusterfs-api >= 3.6.0
+
 BuildRequires:    glusterfs-api-devel >= 3.6.0
 BuildRequires:    help2man >= 1.36
-URL:              http://www.gluster.org
-#
-# The source tarball on GitHub does not contain the ./configure and other
-# generated bits that should be part of a release. Download the original
-# tarball, unpack and run "./autogen.sh && ./configure && make dist" to
-# generate the tarball for this RPM.
-#Source0:          https://github.com/gluster/%{name}/archive/%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
-Source0:          %{name}-%{shortcommit0}-prep.tar.gz
+BuildRequires:    readline-devel
 
 %description
-gluster-coreutils provides a set of basic utilities such as cat, mkdir, ls, and
-tail that are implemented specifically using the GlusterFS API.
+gluster-coreutils provides a set of basic utilities such as cat, mkdir, ls,
+stat, rm and tail that are implemented specifically using the GlusterFS API.
 
 %prep
-%setup -qn %{name}-%{shortcommit0}
+%setup -q -n %{name}-%{shortcommit0}
 
 %build
 %configure
-make
+make %{?_smp_mflags}
 
 %install
-make DESTDIR=${RPM_BUILD_ROOT} install
-
-for i in gfcat gfcp gfmkdir gfls gfrm gfstat gftail; do
-        ln -fs %{_bindir}/gfcli ${RPM_BUILD_ROOT}%{_bindir}/$i
-done
-
-%clean
-rm -rf ${RPM_BUILD_ROOT}
+%make_install
 
 %files
+%license COPYING
 %{_bindir}/gfcat
 %{_bindir}/gfcli
 %{_bindir}/gfcp
@@ -63,7 +57,12 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_mandir}/man1/gftail.1.gz
 
 %changelog
-* Fri Aug 21 2015 Niels de Vos <ndevos@redhat.com> - 0.0.1-0.1.git0c86f7f
-- initial packaging based on upstream .spec
-- remove build dependency on libtirpc (pull request #4)
+* Fri Jun 03 2016 Anoop C S <anoopcs@redhat.com> - 0.0.1-0.1.git259f269
+- Fixed unused variable build error
+
+* Thu May 05 2016 Anoop C S <anoopcs@redhat.com> - 0.0.1-0.4.git60d57d8
+- Fixed creation of links within upstream
+
+* Fri Apr 29 2016 Anoop C S <anoopcs@redhat.com> - 0.0.1-0.3.gitf9a4a2e
+- Initial package based on upstream spec file
 
