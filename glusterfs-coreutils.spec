@@ -1,10 +1,10 @@
-%global commit0 259f269f7a4345eabe419c29ce51a2d2a8346e19
+%global commit0 c155815073667968aade0880abaecf709c5416fc
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Summary:          Core Utilities for the Gluster Distributed File System
 Name:             glusterfs-coreutils
-Version:          0.0.1
-Release:          0.1.git%{shortcommit0}%{?dist}
+Version:          0.2.0
+Release:          1%{?dist}_37
 License:          GPLv3
 Group:            System Environment/Base
 URL:              https://github.com/gluster/glusterfs-coreutils
@@ -37,26 +37,13 @@ make %{?_smp_mflags}
 
 %files
 %license COPYING
-%{_bindir}/gfcat
-%{_bindir}/gfcli
-%{_bindir}/gfcp
-%{_bindir}/gfls
-%{_bindir}/gfmkdir
-%{_bindir}/gfput
-%{_bindir}/gfrm
-%{_bindir}/gfstat
-%{_bindir}/gftail
-%{_mandir}/man1/gfcat.1.gz
-%{_mandir}/man1/gfcli.1.gz
-%{_mandir}/man1/gfcp.1.gz
-%{_mandir}/man1/gfls.1.gz
-%{_mandir}/man1/gfmkdir.1.gz
-%{_mandir}/man1/gfput.1.gz
-%{_mandir}/man1/gfrm.1.gz
-%{_mandir}/man1/gfstat.1.gz
-%{_mandir}/man1/gftail.1.gz
+%{_bindir}/*
+%{_mandir}/man1/*
 
 %changelog
+* Wed Jul 27 2016 Anoop C S <anoopcs@redhat.com> - 0.2.0-1
+- Initial public release (#1360506)
+
 * Fri Jun 03 2016 Anoop C S <anoopcs@redhat.com> - 0.0.1-0.1.git259f269
 - Fixed unused variable build error
 
